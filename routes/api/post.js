@@ -22,15 +22,14 @@ router.post(
     }
 
     const { title, content, category } = req.body;
-    let number_of_likes = 0;
 
     try {
       session = neo4j.driver.session();
       const date = neo4j.types.DateTime.fromStandardDate(new Date());
 
       let save = await session.run(
-        `MATCH (p:Person WHERE id(p) = ${req.user.id}) CREATE (p)-[:POSTED]->(po:Post { title: $title, content: $content, category: $category, number_of_likes: $number_of_likes, date: $date }) `,
-        { title, content, category, number_of_likes, date }
+        `MATCH (p:Person WHERE id(p) = ${req.user.id}) CREATE (p)-[:POSTED]->(po:Post { title: $title, content: $content, category: $category, date: $date }) `,
+        { title, content, category, date }
       );
 
       res.json(save);
